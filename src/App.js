@@ -8,6 +8,7 @@ import Wrapper from './components/Wrapper'
 import Title from './components/Title'
 import Nav from './components/Nav'
 import NavLink from './components/NavLink'
+import entries from './data/content.json'
 
 const title = 'You Are Doing Great'
 const routes = [
@@ -25,7 +26,7 @@ const routes = [
 
 class App extends Component {
   render () {
-    return <div>{this.props.entries.map((e,i) => <span key={i}>{e.fields.description.content[0].content[0].value}</span>)}</div>
+    return <div>{entries.map((e,i) => <span key={i}>{e.fields.description.content[0].content[0].value}</span>)}</div>
   }
 }
 

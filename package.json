@@ -10,6 +10,7 @@
     "chalk": "^1.1.3",
     "cli-table2": "^0.2.0",
     "contentful": "^4.3.0",
+    "dotenv": "^6.2.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
     "react-helmet": "^5.2.0",
@@ -23,6 +24,8 @@
     "build": "react-scripts build && react-snapshot",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && surge -p build"
+    "deploy": "npm run build && surge -p build",
+    "postinstall": "npm run getcontent",
+    "getcontent": "node content.js install"
   }
 }

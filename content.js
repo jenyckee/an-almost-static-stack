@@ -1,4 +1,7 @@
 const contentful = require('contentful')
+const fs = require('fs')
+const path = require('path')
+require('dotenv').config()
 
 const client = contentful.createClient({
   // This is the space ID. A space is like a project folder in Contentful terms
@@ -8,7 +11,7 @@ const client = contentful.createClient({
 })
 
 // Entry point of the boilerplate, called at the end.
-export default function runBoilerplate (cb) {
+function getcontent (cb) {
   displayContentTypes()
   .then(entries => displayEntries(entries, cb))
   .catch((error) => {
@@ -28,11 +31,13 @@ function displayContentTypes () {
 }
 
 function displayEntries (contentTypes, cb) {
-
   return Promise.all(contentTypes.map((contentType) => {
     return fetchEntriesForContentType(contentType)
     .then((entries) => {
-      cb(entries)
+      fs.writeFileSync(
+        path.join(__dirname, 'src', 'data', `content.json`),
+        JSON.stringify(entries)
+      )
     })
   }))
 }
@@ -57,3 +62,6 @@ function fetchEntriesForContentType (contentType) {
   })
 }
 
+if (process.argv[2] === 'install') {
+  getcontent()
+}
