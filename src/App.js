@@ -25,7 +25,7 @@ const routes = [
 
 class App extends Component {
   render () {
-    return <div>{this.props.entries.map(e => <span>{e.fields.description.content[0].content[0].value}</span>)}</div>
+    return <div>{this.props.entries.map((e,i) => <span key={i}>{e.fields.description.content[0].content[0].value}</span>)}</div>
   }
 }
 
