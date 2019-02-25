@@ -72,7 +72,7 @@ function displayEntries (contentTypes) {
       })
       
       var json = JSON.stringify(entries)
-      fs.writeFile('./src/static/entries.json', json, 'utf8')
+      fs.writeFile('./src/static/entries.json', json, 'utf8', () => null)
 
       console.log(table.toString())
     })
