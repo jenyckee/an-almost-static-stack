@@ -1,31 +1,22 @@
 'use strict'
 
 const contentful = require('contentful')
-const chalk = require('chalk')
 const Table = require('cli-table2')
 const fs = require('fs');
 require('dotenv').config()
 
 const client = contentful.createClient({
   // This is the space ID. A space is like a project folder in Contentful terms
-  space: process.env.SPACE_ID,
+  space: process.env.REACT_APP_SPACE_ID,
   // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
-  accessToken: process.env.ACCESS_TOKEN
+  accessToken: process.env.REACT_APP_ACCESS_TOKEN
 })
 
-console.log(chalk.green.bold('\nWelcome to the Contentful JS Boilerplate\n'))
-console.log('This is a simplified example to demonstrate the usage of the Contentful CDA\n')
-
 // Entry point of the boilerplate, called at the end.
-function runBoilerplate () {
+export default function runBoilerplate (cb) {
   displayContentTypes()
-  .then(displayEntries)
-  .then(() => {
-    console.log('Want to go further? Feel free to check out this guide:')
-    console.log(chalk.cyan('https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/\n'))
-  })
+  .then(entries => displayEntries(entries, cb))
   .catch((error) => {
-    console.log(chalk.red('\nError occurred:'))
     if (error.stack) {
       console.error(error.stack)
       return
@@ -35,8 +26,6 @@ function runBoilerplate () {
 }
 
 function displayContentTypes () {
-  console.log(chalk.green('Fetching and displaying Content Types ...'))
-
   return fetchContentTypes()
   .then((contentTypes) => {
     // Display a table with Content Type information
@@ -55,26 +44,12 @@ function displayContentTypes () {
   })
 }
 
-function displayEntries (contentTypes) {
-  console.log(chalk.green('Fetching and displaying Entries ...'))
+function displayEntries (contentTypes, cb) {
 
   return Promise.all(contentTypes.map((contentType) => {
     return fetchEntriesForContentType(contentType)
     .then((entries) => {
-      console.log(`\These are the first 100 Entries for Content Type ${chalk.cyan(contentType.name)}:\n`)
-
-      // Display a table with Entry information
-      const table = new Table({
-        head: ['Id', 'Title']
-      })
-      entries.forEach((entry) => {
-        table.push([entry.sys.id, entry.fields[contentType.displayField] || '[empty]'])
-      })
-      
-      var json = JSON.stringify(entries)
-      fs.writeFile('./src/static/entries.json', json, 'utf8', () => null)
-
-      console.log(table.toString())
+      cb(entries)
     })
   }))
 }
@@ -84,7 +59,6 @@ function fetchContentTypes () {
   return client.getContentTypes()
   .then((response) => response.items)
   .catch((error) => {
-    console.log(chalk.red('\nError occurred while fetching Content Types:'))
     console.error(error)
   })
 }
@@ -96,10 +70,7 @@ function fetchEntriesForContentType (contentType) {
     })
   .then((response) => response.items)
   .catch((error) => {
-    console.log(chalk.red(`\nError occurred while fetching Entries for ${chalk.cyan(contentType.name)}:`))
     console.error(error)
   })
 }
 
-// Start the boilerplate code
-runBoilerplate()
