@@ -8,7 +8,6 @@ import Wrapper from './components/Wrapper'
 import Title from './components/Title'
 import Nav from './components/Nav'
 import NavLink from './components/NavLink'
-import entries from './static/entries.json'
 
 const title = 'You Are Doing Great'
 const routes = [

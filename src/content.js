@@ -1,8 +1,7 @@
 'use strict'
 
 const contentful = require('contentful')
-const Table = require('cli-table2')
-const fs = require('fs');
+
 require('dotenv').config()
 
 const client = contentful.createClient({
@@ -28,18 +27,6 @@ export default function runBoilerplate (cb) {
 function displayContentTypes () {
   return fetchContentTypes()
   .then((contentTypes) => {
-    // Display a table with Content Type information
-    const table = new Table({
-      head: ['Id', 'Title', 'Fields']
-    })
-    contentTypes.forEach((contentType) => {
-      const fieldNames = contentType.fields
-        .map((field) => field.name)
-        .sort()
-      table.push([contentType.sys.id, contentType.name, fieldNames.join(', ')])
-    })
-    console.log(table.toString())
-
     return contentTypes
   })
 }
