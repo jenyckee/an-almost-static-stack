@@ -9,7 +9,6 @@ import Title from './components/Title'
 import Nav from './components/Nav'
 import NavLink from './components/NavLink'
 import entries from './data/content'
-
 const title = 'You Are Doing Great'
 const routes = [
   {
@@ -26,7 +25,28 @@ const routes = [
 
 class App extends Component {
   render () {
-    return <div>{entries.map((e,i) => <span key={i}>{e.fields.description.content[0].content[0].value}</span>)}</div>
+    return (
+      <Router>
+        <Wrapper>
+          <Helmet titleTemplate={`%s - ${title}`} />
+          <Title>YADG</Title>
+          <div>{entries.map((e,i) => <span key={i}>{e.fields.menue.fields.description.content[0].content[0].value}</span>)}</div>
+
+          <Nav>
+            <h1>Navigation</h1>
+            {routes.map((route, i) => (
+              <NavLink key={i} {...route} />
+            ))}
+          </Nav>
+          <Switch>
+            {routes.map((route, i) => (
+              <Route key={i} {...route} />
+            ))}
+            <Route component={NoMatch} />
+          </Switch>
+        </Wrapper>
+      </Router>
+    )
   }
 }
 
